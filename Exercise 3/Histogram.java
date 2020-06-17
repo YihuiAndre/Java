@@ -1,13 +1,21 @@
+import java.util.Optional;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Histogram extends Application{
+	public static int table;
 	public static void main(String[] args){
 		//launch the program
+		Histogram a = new Histogram();
+		table = 10;
 		Application.launch(args);
 	}
 	
@@ -20,10 +28,28 @@ public class Histogram extends Application{
 		//set up the canvas with the width and height
 		Canvas canvas = new Canvas(w,h);
 		GraphicsContext gc = canvas.getGraphicsContext2D();
-		//create a MyPieChart object
-		HistogramAlphaBet A = new MyPieChart("Alice in Wonderland.txt", 5);
-		//draw the image to the canvas
-		A.draw(gc);
+		//Create a text input dialog
+		TextInputDialog input = new TextInputDialog();
+		input.setTitle("Characters Frequency");
+		input.setHeaderText("Enter number");
+		Optional<String> result;
+		//Create a error dialog to show the invalid input
+		Alert invalidInput = new Alert(AlertType.ERROR);
+		invalidInput.setHeaderText("Invalid input!!");
+		while(true){
+			result = input.showAndWait();
+			//check if user enter result and the result only contain integer and smaller than 26
+			if(result.isPresent() && (!result.get().matches("[0-9]+") || Integer.parseInt(result.get()) > 26)) {
+				invalidInput.showAndWait();
+			}
+			else {
+				//create a MyPieChart object, if there is no result provide by the user, then return zero in the result by default
+				HistogramAlphaBet A = new MyPieChart("Alice in Wonderland.txt", Integer.parseInt(result.orElse("0")));
+				//draw the image to the canvas
+				A.draw(gc);
+				break;
+			}
+		}
 		//create a Pane class to manage the canvas
 		Pane root = new Pane();
 		//add canvas into the pane class

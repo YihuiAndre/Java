@@ -43,6 +43,7 @@ public class HistogramAlphaBet {
 		//sort the HashMap by the values in decreasing order
 		frequent = sort(frequent);
 	}
+	
 	//sort the HashMap by value in decreasing order
 	private static<K> Map<K,Integer> sort(Map<K, Integer> map){
 		//create a LinkedHashMap object
